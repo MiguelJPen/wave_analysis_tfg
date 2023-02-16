@@ -38,7 +38,7 @@ Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
 
 %% Pre-calculation of Gauss-Legendre Quadrature, Shape function and their Derivatives
 % Gauss Quadrature
-ngp = 3;
+nnp = 3;
 run('GaussianLegendre.m');
 % Shape Functions
 run('ShapeFunctions.m');
