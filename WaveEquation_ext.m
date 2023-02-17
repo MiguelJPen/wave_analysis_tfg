@@ -7,35 +7,6 @@
 % Created: 2019
 % Contact: engineerabdullah@ymail.com
 
-clear; clc; clf; path(pathdef); format long
-addpath FECore/
-
-%% 1D Meshing
-xstart = 0;             % Start point
-xend   = 10;            %%% End point
-tne    = 100;           % Total number of element in the domain.
-dx     = 10/100;         % spatial step
-%%% spatial step dx = 10/100 = 0.1
-
-% Element type:         Q1 --> LINEAR,  Q2 --> QUADRATIC
-elementtype = 'Q2';
-% Creating 1D Mesh.
-[ L, lnn, nne, el, egnn, tnn, x ] = CreateMesh( elementtype, tne, xstart, xend  );
-        
-%% Material Properties (Constant with in elements -- Q0)
-
-% MECHANICAL
-%%% We nondimensionalize
-E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
-rho   = 1;     % 11.6e2 ; % Density of the material
-
-%%% Inclusion  30*25*40=30000 parameter sets
-x0    = 5;  % range [2,8] step 0.2 6*5=30 values
-l0    = 1;  % range [0.5 5.5] step 0.2 5*5=25 values
-E0    = 3;  % range [1,9] step 0.2 5*8=40  values
-rho0  = 1;
-Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
-
 %% Pre-calculation of Gauss-Legendre Quadrature, Shape function and their Derivatives
 % Gauss Quadrature
 nnp = 3;
@@ -142,6 +113,13 @@ A(f,1) = Mff \ (FV(f,1) - Kff*U(f,1));
 % Matlab then remove the word "decomposition" from the following line.
 dK = decomposition(Mff + Kff*dt^2*beta);
 
+if save_results ~= 0
+    resFile = fopen(results_filename, 'a+');
+    fprintf(resFile, '\n %6d, ', x0);
+    fprintf(resFile, '%2.4f, ', l0);
+    fprintf(resFile, '%2.4f, ', E0);
+end
+
 % Time marching (Newmark Family -- A Method)
 for n = 2 : tnts
 	
@@ -158,26 +136,36 @@ for n = 2 : tnts
 	U(f,n) = U(f,n) + dt^2*beta*A(f,n);
 	% Velocity Corrector
 	V(f,n) = V(f,n) + dt*gamma*A(f,n);
+
+    if save_results ~= 0
+        fprintf(resFile, '%2.5f, ', A(tnn, n));
+    end
 	
-    % POST-PROCESSING
-    figure(1);
-    subplot(3,1,1)
-    plot(x,U(:,n));
-    xlim([min(x)-max(x)/10 max(x)+max(x)/10])
-    ylim([-1 1]/5e0)
-    title('Displacement');
-    drawnow
-    subplot(3,1,2);
-    plot(x,V(:,n));
-    xlim([min(x)-max(x)/10 max(x)+max(x)/10])
-    ylim([-1 1]/1e0)
-    title('Velocity');
-    drawnow
-    subplot(3,1,3)
-    plot(x,A(:,n));
-    xlim([min(x)-max(x)/10 max(x)+max(x)/10])
-    ylim([-1 1]/1e-1)
-    title('Acceleration');
-    drawnow
-    
+    if graph ~= 0
+        figure(1);
+        subplot(3,1,1)
+        plot(x,U(:,n));
+        xlim([min(x)-max(x)/10 max(x)+max(x)/10])
+        ylim([-1 1]/5e0)
+        title('Displacement');
+        drawnow
+
+        subplot(3,1,2);
+        plot(x,V(:,n));
+        xlim([min(x)-max(x)/10 max(x)+max(x)/10])
+        ylim([-1 1]/1e0)
+        title('Velocity');
+        drawnow
+
+        subplot(3,1,3)
+        plot(x,A(:,n));
+        xlim([min(x)-max(x)/10 max(x)+max(x)/10])
+        ylim([-1 1]/1e-1)
+        title('Acceleration');
+        drawnow
+    end
+end
+
+if save_results ~= 0
+    fclose(resFile);
 end
