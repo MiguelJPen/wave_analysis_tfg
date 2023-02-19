@@ -24,10 +24,10 @@ elementtype = 'Q2';
 E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
-%%% Inclusion  30*25*40=30000 parameter sets
-% x0 range [2,8] step 0.2 6*5=30 values
-% l0 range [0.5 5.5] step 0.2 5*5=25 values
-% E0 range [1,9] step 0.2 5*8=40  values
+%%% Inclusion  30*25*40=33046 parameter sets
+% x0 range [2,8] step 0.2 6*5=31 values
+% l0 range [0.5 5.5] step 0.2 5*5=26 values
+% E0 range [1,9] step 0.2 5*8=41  values
 
 for x0 = 2 : 0.2 : 8
     for l0 = 0.5 : 0.2 : 5.5

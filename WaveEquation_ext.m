@@ -115,9 +115,9 @@ dK = decomposition(Mff + Kff*dt^2*beta);
 
 if save_results ~= 0
     resFile = fopen(results_filename, 'a+');
-    fprintf(resFile, '\n %6d, ', x0);
-    fprintf(resFile, '%2.4f, ', l0);
-    fprintf(resFile, '%2.4f, ', E0);
+    fprintf(resFile, '\n %2.1f, ', x0);
+    fprintf(resFile, '%2.1f, ', l0);
+    fprintf(resFile, '%2.1f, , ', E0);
 end
 
 % Time marching (Newmark Family -- A Method)
@@ -137,8 +137,8 @@ for n = 2 : tnts
 	% Velocity Corrector
 	V(f,n) = V(f,n) + dt*gamma*A(f,n);
 
-    if save_results ~= 0
-        fprintf(resFile, '%2.5f, ', A(tnn, n));
+    if save_results ~= 0 && mod(n-2, 6) == 0
+        fprintf(resFile, '%2.5f, ', U(tnn, n));
     end
 	
     if graph ~= 0
