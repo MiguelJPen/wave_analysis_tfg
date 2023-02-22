@@ -32,7 +32,6 @@ for en = 1 : tne
 		x_z  = N(gs,:) * x(egnn(en,:));
 
 		%Force at that gauss point
-		%%%force = (3*x_z + x_z^2)*exp(x_z);  % This is an example
         f_amp = 1;
         mu = 1; % the center must be inside the interval
         sigma = 0.2;

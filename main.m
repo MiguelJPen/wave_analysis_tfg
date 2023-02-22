@@ -1,6 +1,8 @@
+run('new_env.m');
+
 %% PROGRAM CONFIGURATION
-graph = 0; % To graph the wave equations
-save_results = 1; 
+graph = 1; % To graph the wave equations
+save_results = 0; 
 results_filename = 'results.csv';
 
 %% 1D Meshing
@@ -19,13 +21,13 @@ elementtype = 'Q2';
 
 % MECHANICAL
 %%% We nondimensionalize
-E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
-rho   = 1;     % 11.6e2 ; % Density of the material
+E     = 1;     % Outer velocity ; % Elasticity Tensor
+rho   = 1;     % Density of the material
 
 %%% Inclusion  30*25*40=30000 parameter sets
 x0    = 5;  % range [2,8] step 0.2 6*5=30 values
 l0    = 1;  % range [0.5 5.5] step 0.2 5*5=25 values
-E0    = 3;  % range [1,9] step 0.2 5*8=40  values
+E0    = 9;  % range [1,9] step 0.2 5*8=40  values
 Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
 
 run('WaveEquation_ext.m');
