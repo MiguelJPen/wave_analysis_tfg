@@ -2,6 +2,7 @@ run('new_env.m');
 
 %% PROGRAM CONFIGURATION
 graph = 0; % To graph the wave equations
+save_graph = 0;
 save_results = 1; 
 results_filename = 'results.csv';
 

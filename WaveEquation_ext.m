@@ -139,6 +139,16 @@ for n = 2 : tnts
     if save_results ~= 0 && mod(n-2, 6) == 0
         fprintf(resFile, '%2.5f, ', U(tnn, n));
     end
+
+    if save_graph ~= 0
+        %yl = yline(0);
+        %yl.LineWidth = 2;
+            
+        plot(0, [0 L])
+        xlim([min(x)-max(x)/10 max(x)+max(x)/10])
+
+        exportgraphics(gcf,'vectorfig.pdf','ContentType','vector')
+    end
 	
     if graph ~= 0
         figure(1);
