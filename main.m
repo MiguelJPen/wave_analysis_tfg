@@ -27,7 +27,7 @@ rho   = 1;     % Density of the material
 
 %%% Inclusion  30*25*40=30000 parameter sets
 x0    = 5;  % range [2,8] step 0.2 6*5=30 values
-l0    = 1;  % range [0.5 5.5] step 0.2 5*5=25 values
+l0    = 2;  % range [0.5 5.5] step 0.2 5*5=25 values
 E0    = 9;  % range [1,9] step 0.2 5*8=40  values
 Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
 

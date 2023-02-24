@@ -119,6 +119,11 @@ if save_results ~= 0
     fprintf(resFile, '%2.1f, , ', E0);
 end
 
+if save_graph ~= 0            
+    run("graph1.m");
+    result = zeros(1, round(tnn/6));
+end
+
 % Time marching (Newmark Family -- A Method)
 for n = 2 : tnts
 	
@@ -140,14 +145,8 @@ for n = 2 : tnts
         fprintf(resFile, '%2.5f, ', U(tnn, n));
     end
 
-    if save_graph ~= 0
-        %yl = yline(0);
-        %yl.LineWidth = 2;
-            
-        plot(0, [0 L])
-        xlim([min(x)-max(x)/10 max(x)+max(x)/10])
-
-        exportgraphics(gcf,'vectorfig.pdf','ContentType','vector')
+    if save_graph ~= 0 && mod(n-2, 6) == 0
+        result(1, round((n-2)/6) + 1) = U(tnn, n);
     end
 	
     if graph ~= 0
@@ -173,6 +172,11 @@ for n = 2 : tnts
         title('Acceleration');
         drawnow
     end
+end
+
+if save_graph ~= 0            
+    run("graph2.m");
+    run("graph3.m");
 end
 
 if save_results ~= 0
