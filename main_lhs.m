@@ -30,7 +30,7 @@ rho   = 1;     % 11.6e2 ; % Density of the material
 % l0 range [0.5 5.5]
 % E0 range [1,9]
 
-n_samples = 10;
+n_samples = 10000;
 X = lhsdesign(n_samples, 3);
 
 x0_l = zeros(n_samples, 1);
