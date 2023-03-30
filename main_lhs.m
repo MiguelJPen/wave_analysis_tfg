@@ -4,6 +4,7 @@ run('new_env.m');
 graph = 0; % To graph the wave equations
 save_graph = 0;
 save_results = 1; 
+save_colormap = 0;
 results_filename = 'results_lhs.csv';
 
 %% 1D Meshing
@@ -30,7 +31,7 @@ rho   = 1;     % 11.6e2 ; % Density of the material
 % l0 range [0.5 5.5]
 % E0 range [1,9]
 
-n_samples = 10000;
+n_samples = 100000;
 X = lhsdesign(n_samples, 3);
 
 x0_l = zeros(n_samples, 1);
@@ -38,8 +39,8 @@ l0_l = zeros(n_samples, 1);
 E0_l = zeros(n_samples, 1);
 
 for i = 1 : n_samples
-    x0_l(i) = 2 + X(i, 1) * 6;
-    l0_l(i) = 0.5 + X(i, 2) * 5;
+    x0_l(i) = 2.5 + X(i, 1) * 5;
+    l0_l(i) = 0.2 + X(i, 2) * 4.8;
     E0_l(i) = 1 + X(i, 3) * 8;
 end
 
@@ -47,7 +48,11 @@ for i = 1 : n_samples
     x0 = x0_l(i);
     l0 = l0_l(i);
     E0 = E0_l(i);
-    Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
-    run('WaveEquation_ext.m');
+    if (x0-(l0/2)) >= 2.5 
+        if (x0+(l0/2)) <= 7.5
+            Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
+            run('WaveEquation_ext.m');
+        end
+    end
 end
 

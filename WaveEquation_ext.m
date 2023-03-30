@@ -114,9 +114,9 @@ dK = decomposition(Mff + Kff*dt^2*beta);
 
 if save_results ~= 0
     resFile = fopen(results_filename, 'a+');
-    fprintf(resFile, '\n %2.1f, ', x0);
-    fprintf(resFile, '%2.1f, ', l0);
-    fprintf(resFile, '%2.1f, , ', E0);
+    fprintf(resFile, '\n %2.8f, ', x0);
+    fprintf(resFile, '%2.8f, ', l0);
+    fprintf(resFile, '%2.8f, , ', E0);
 end
 
 if save_graph ~= 0            
@@ -125,6 +125,7 @@ if save_graph ~= 0
 end
 
 % Time marching (Newmark Family -- A Method)
+mapj = 1;
 for n = 2 : tnts
 	
 	% Displacement Predictor
@@ -141,8 +142,13 @@ for n = 2 : tnts
 	% Velocity Corrector
 	V(f,n) = V(f,n) + dt*gamma*A(f,n);
 
-    if save_results ~= 0 && mod(n-2, 6) == 0
-        fprintf(resFile, '%2.5f, ', U(tnn, n));
+    if save_results ~= 0 && mod(n-2, 2) == 0
+        fprintf(resFile, '%2.8f, ', U(tnn, n));
+    end
+
+    if save_colormap ~= 0 && n >= tnts/2 && mod(n-2, 4) == 0
+        MAP(map_index, mapj) = U(tnn, n);
+        mapj = mapj + 1;
     end
 
     if save_graph ~= 0 && mod(n-2, 6) == 0

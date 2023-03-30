@@ -4,6 +4,7 @@ run('new_env.m');
 graph = 0; % To graph the wave equations
 save_graph = 0;
 save_results = 1; 
+save_colormap = 0;
 results_filename = 'results.csv';
 
 %% 1D Meshing
@@ -26,15 +27,19 @@ E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
 %%% Inclusion  30*25*40=33046 parameter sets
-% x0 range [2,8] step 0.2 6*5=31 values
-% l0 range [0.5 5.5] step 0.2 5*5=26 values
-% E0 range [1,9] step 0.2 5*8=41  values
+% x0 range [2'5, 7'5] step 0.15 6*5=31 values
+% l0 range [0.2, 5] step 0.15 5*5=51 values
+% E0 range [1, 9] step 0.15 5*8=81  values
 
-for x0 = 2 : 0.2 : 8
-    for l0 = 0.5 : 0.2 : 5.5
-        for E0 = 1 : 0.2 : 9
-            Evble =@(x)E+E0*(heaviside(x-(x0-l0))-heaviside(x-(x0+l0)));
-            run('WaveEquation_ext.m');
+for x0 = 3 : 0.15 : 7
+    for l0 = 0.2 : 0.15 : 5
+        for E0 = 1 : 0.15 : 9
+            if (x0-(l0/2)) >= 2.5 
+                if (x0+(l0/2)) <= 7.5
+                    Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
+                    run('WaveEquation_ext.m');
+                end
+            end
         end
     end
 end
