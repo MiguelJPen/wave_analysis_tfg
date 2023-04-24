@@ -31,7 +31,7 @@ rho   = 1;     % 11.6e2 ; % Density of the material
 % l0 range [0.5 5.5]
 % E0 range [1,9]
 
-n_samples = 100000;
+n_samples = 50000;
 X = lhsdesign(n_samples, 3);
 
 x0_l = zeros(n_samples, 1);
@@ -48,11 +48,11 @@ for i = 1 : n_samples
     x0 = x0_l(i);
     l0 = l0_l(i);
     E0 = E0_l(i);
-    if (x0-(l0/2)) >= 2.5 
-        if (x0+(l0/2)) <= 7.5
+    %if (x0-(l0/2)) >= 2.5 
+        %if (x0+(l0/2)) <= 7.5
             Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
             run('WaveEquation_ext.m');
-        end
-    end
+        %end
+    %end
 end
 

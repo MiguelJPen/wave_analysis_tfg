@@ -4,7 +4,7 @@ run('new_env.m');
 graph = 0; % To graph the wave equations
 save_graph = 0;
 save_results = 0; 
-save_colormap = 0;
+save_colormap = 1;
 results_filename = '';
 
 %% 1D Meshing
@@ -26,42 +26,19 @@ elementtype = 'Q2';
 E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
-%%% Inclusion  30*25*40=33046 parameter sets
-% x0 range [2'5, 7'5] step 0.15 6*5=31 values
-% l0 range [0.2, 5] step 0.15 5*5=51 values
-% E0 range [1, 9] step 0.15 5*8=81  values
+MAP = zeros(1,50);
+map_index = 1;
 
-% MAP = zeros(1,50);
-% map_index = 1;
-% 
-% for E0 = 1 : 0.8 : 9
-%     for x0 = 3 : 0.8 : 7
-%         for l0 = 0.2 : 0.96 : 5
-%             Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
-%             run('WaveEquation_ext.m');
-%             map_index = map_index + 1;
-%         end
-%     end
-% end
-% 
-% colormap('parula')
-% imagesc(MAP)
-% colorbar
-
-E0 = 4;
-x0 = 5;
-
-figure(1)
-xlim([0 10.5])
-ylim([-0.02 0.32])
-title('u(L, t) = g(t), E0 = 4, x0 = 5');
-hold on
-
-for l0 = 0.2 : 0.53 : 5
-    Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
-    run('WaveEquation_ext.m');
-
-    plot((0.1 : 0.0165 : 10), U(tnn, :), 'DisplayName','l0 = ' + string(l0));
-    hold on
+for E0 = 1 : 1.6 : 9
+    for l0 = 0.2 : 0.96 : 5
+        for x0 = 3 : 0.8 : 7
+            Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
+            run('WaveEquation_ext.m');
+            map_index = map_index + 1;
+        end
+    end
 end
-legend
+
+colormap('parula')
+imagesc(MAP)
+colorbar

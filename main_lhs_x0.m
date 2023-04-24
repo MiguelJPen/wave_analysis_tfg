@@ -5,7 +5,7 @@ graph = 0; % To graph the wave equations
 save_graph = 0;
 save_results = 1; 
 save_colormap = 0;
-results_filename = 'results.csv';
+results_filename = 'results_lhs_x0.csv';
 
 %% 1D Meshing
 xstart = 0;             % Start point
@@ -26,20 +26,27 @@ elementtype = 'Q2';
 E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
-% x0 range [2'5, 7'5]
-% l0 range [0.2, 5]
-% E0 range [1, 9]
+%%% Latin hypercube sampling
+% x0 range [2,8]
+% l0 range [0.5 5.5]
+% E0 range [1,9]
 
-for x0 = 3 : 0.15 : 7
-    for l0 = 0.2 : 0.15 : 5
-        for E0 = 1 : 0.15 : 9
-            if (x0-(l0/2)) >= 2.5 
-                if (x0+(l0/2)) <= 7.5
-                    Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
-                    run('WaveEquation_ext.m');
-                end
-            end
-        end
-    end
+x0 = 7.4;
+n_samples = 50000;
+X = lhsdesign(n_samples, 2);
+
+l0_l = zeros(n_samples, 1);
+E0_l = zeros(n_samples, 1);
+
+for i = 1 : n_samples
+    l0_l(i) = 0.2 + X(i, 1) * 4.8;
+    E0_l(i) = 1 + X(i, 2) * 8;
+end
+
+for i = 1 : n_samples
+    l0 = l0_l(i);
+    E0 = E0_l(i);
+    Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
+    run('WaveEquation_ext.m');
 end
 

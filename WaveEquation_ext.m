@@ -73,7 +73,7 @@ Mpp = barM(p,p); Mpf = barM(p,f); Mfp = barM(f,p); Mff = barM(f,f);
 %% Newmark Family -- A Method
 
 % TIME DATA
-T    = 10;                  %%% Total Time
+T    = 20;                  %%% Total Time
 cmax = sqrt(9);             %%% maximum expected velocity
 cfl  = 1/2/cmax;            %%% cfl stability condition
 dt   = cfl*dx;              %%% Time Step Size
@@ -146,7 +146,7 @@ for n = 2 : tnts
         fprintf(resFile, '%2.8f, ', U(tnn, n));
     end
 
-    if save_colormap ~= 0 && n >= tnts/2 && mod(n-2, 4) == 0
+    if save_colormap ~= 0 && n >= 300 && mod(n-2, 4) == 0
         MAP(map_index, mapj) = U(tnn, n);
         mapj = mapj + 1;
     end
