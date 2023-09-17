@@ -5,7 +5,7 @@ graph = 0; % To graph the wave equations
 save_graph = 0;
 save_results = 1; 
 save_colormap = 0;
-results_filename = 'results_lhs.csv';
+results_filename = 'lhs.csv';
 
 %% 1D Meshing
 xstart = 0;             % Start point
@@ -21,17 +21,21 @@ elementtype = 'Q2';
         
 %% Material Properties (Constant with in elements -- Q0)
 
+if save_results ~= 0
+    resFile = fopen(results_filename, 'a+');
+end
+
 % MECHANICAL
 %%% We nondimensionalize
 E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
 %%% Latin hypercube sampling
-% x0 range [2,8]
-% l0 range [0.5 5.5]
-% E0 range [1,9]
+% x0 range [3,   7]
+% l0 range [0.2, 5]
+% E0 range [1,   9]
 
-n_samples = 50000;
+n_samples = 1000;
 X = lhsdesign(n_samples, 3);
 
 x0_l = zeros(n_samples, 1);
@@ -39,7 +43,7 @@ l0_l = zeros(n_samples, 1);
 E0_l = zeros(n_samples, 1);
 
 for i = 1 : n_samples
-    x0_l(i) = 2.5 + X(i, 1) * 5;
+    x0_l(i) = 3 + X(i, 1) * 4;
     l0_l(i) = 0.2 + X(i, 2) * 4.8;
     E0_l(i) = 1 + X(i, 3) * 8;
 end
@@ -56,3 +60,6 @@ for i = 1 : n_samples
     %end
 end
 
+if save_results ~= 0
+    fclose(resFile);
+end

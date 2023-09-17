@@ -73,7 +73,7 @@ Mpp = barM(p,p); Mpf = barM(p,f); Mfp = barM(f,p); Mff = barM(f,f);
 %% Newmark Family -- A Method
 
 % TIME DATA
-T    = 20;                  %%% Total Time
+T    = 10;                  %%% Total Time
 cmax = sqrt(9);             %%% maximum expected velocity
 cfl  = 1/2/cmax;            %%% cfl stability condition
 dt   = cfl*dx;              %%% Time Step Size
@@ -113,7 +113,6 @@ A(f,1) = Mff \ (FV(f,1) - Kff*U(f,1));
 dK = decomposition(Mff + Kff*dt^2*beta);
 
 if save_results ~= 0
-    resFile = fopen(results_filename, 'a+');
     fprintf(resFile, '\n %2.8f, ', x0);
     fprintf(resFile, '%2.8f, ', l0);
     fprintf(resFile, '%2.8f, , ', E0);
@@ -183,8 +182,4 @@ end
 if save_graph ~= 0            
     run("graph2.m");
     run("graph3.m");
-end
-
-if save_results ~= 0
-    fclose(resFile);
 end

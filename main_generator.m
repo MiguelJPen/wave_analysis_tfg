@@ -21,25 +21,32 @@ elementtype = 'Q2';
         
 %% Material Properties (Constant with in elements -- Q0)
 
+if save_results ~= 0
+    resFile = fopen(results_filename, 'a+');
+end
+
 % MECHANICAL
 %%% We nondimensionalize
 E     = 1;     % Outer velocity ; %2e5 Elasticity Tensor
 rho   = 1;     % 11.6e2 ; % Density of the material
 
-% x0 range [2'5, 7'5]
+% x0 range [3,   7]
 % l0 range [0.2, 5]
-% E0 range [1, 9]
+% E0 range [1,   9]
 
-for x0 = 3 : 0.15 : 7
-    for l0 = 0.2 : 0.15 : 5
-        for E0 = 1 : 0.15 : 9
-            if (x0-(l0/2)) >= 2.5 
-                if (x0+(l0/2)) <= 7.5
-                    Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
-                    run('WaveEquation_ext.m');
-                end
-            end
-        end
+for x0 = 3 : 0.4444444 : 7
+    for l0 = 0.2 : 0.5333333 : 5
+        for E0 = 1 : 0.8888888 : 9
+%             if (x0-(l0/2)) >= 2.5 
+%                 if (x0+(l0/2)) <= 7.5
+                     Evble =@(x)E+E0*(heaviside(x-(x0-(l0/2)))-heaviside(x-(x0+(l0/2))));
+                     run('WaveEquation_ext.m');
+%                 end
+%             end
+         end
     end
 end
 
+if save_results ~= 0
+    fclose(resFile);
+end
